@@ -1,0 +1,11 @@
+frmMDI = 44, 58, 794, 675, , 66, 87, 816, 704, C
+frmAbout = 113, 0, 863, 617, , 88, 116, 838, 733, C
+frmDocList = 179, 140, 929, 757, , 132, 174, 882, 791, C
+frmNewResearch = 72, 60, 822, 677, , 0, 0, 921, 617, C
+frmAnalysis = 434, 321, 1184, 938, , 22, 29, 772, 646, C
+clmCase = 488, 116, 1238, 733, 
+clmCaseDate = 62, 56, 812, 673, 
+clmEntrants = 323, 118, 1073, 735, 
+clmExpertFindings = 132, 174, 882, 791, 
+clmHR_Official = 359, 137, 1109, 754, 
+clmCreateDoc = 88, 116, 789, 771, Z

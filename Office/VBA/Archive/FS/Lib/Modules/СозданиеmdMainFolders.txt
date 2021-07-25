@@ -1,0 +1,118 @@
+'модуль для работы с директориями
+'@author Andr.Nab.n@gmail.com
+'mdMainFolders
+'LIb
+'newEF.getNumber = №СМЭ_YY
+ newEF.getNum_Cat =  №СМЭ_YY_Общий
+
+Option Explicit
+Private Const USER_FILE_DIR As String = "D:\...\Project\Resourcesuser\userDir.txt" файл данных, содержащий директорию, ввереднную пользователем
+'массив значений путей
+Public arrDocDir (0 To 6) As String
+'arrDocDir (0) = основная директроия (введенная пользователем) Пр:"D:\Crime\"
+'arrDocDir (1) = 0 + \YYYY  (D:\Crime\2020)
+'arrDocDir (2) = 1 + \newEF.getNum_Cat  (D:\Crime\YYYY\№СМЭ_YY_Общий)
+'arrDocDir (3) = 2+ \Фото_" & criateDocName(№СМЭ)
+'arrDocDir (4) = 2+ \Упаковки_" &
+'arrDocDir (5) = 2+"\Сканы_"  &
+'arrDocDir (5) = 2+"\СопроводДок_"  &
+
+'+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Public Sub getMainDir()
+'функция получения пути из текстового файла. 
+'1) получение пути из текстового файла. 
+	Dim tmpRoot As String
+	Open USER_FILE_DIR  As #fileDescr
+		tmpRoot = "" 
+	Close #fileDescr
+'	проверка на пустое значение
+	If  tmpRoot <>"" Then
+		arrDocDir (0)  = tmpRoot
+	Else
+		Set SvcService = CreateObject("Svcsvc.Service") 'объект библиотеки  svcsvc.dll
+		Set fs = New FileSystemObject                   'экземпляр  FileSystemObject
+		MsgBox MAIN_FOLDER_NOT_EXIST & "Укажите папку для сохранения новых документов!", vbCritical, 
+			arrDocDir (0) = SvcService.SelectFolder("Выбираем папку для сохранения документов", "", &H10 + &H4000, "")
+'			запись пути в текстовый файл программы:
+    			Open USER_FILE_DIR  As #fileDescr
+        			Print #fileDescr,   arrDocDir (0) 'печать нового пути;
+			Close #fileDescr
+		Set SvcService = Nothing    'уничтожение объекта библиотеки  svcsvc.dll
+		Set fs = Nothing            	'уничтожение экземпляра  FileSystemObject
+	End If 
+End Sub
+'
+Public Sub makeDocDir(Optional fn As String = "", _
+						Optional fnCat As String = "Общий")
+'fn - журнальный номер документа_Год = newEF.getNum_Cat
+'fnCat - категория экспертизы по исследуемым объектам = newEF.getNum_Cat
+	ChDrive "D"
+	
+	If   arrDocDir (0) = "" Then
+	MsgBox MAIN_FOLDER_NOT_EXIST , vbExclamation, "Ошибка сохранения!"
+	 	Call  inputUserDir
+	End If
+
+
+
+'создание папок в рабочей директории
+	arrDocDir (1) = arrDocDir (0 ) &  "\" &  CStr(Year(Now))  	'(D:\Crime\YYYY)
+		MkDir arrDocDir (1)
+	arrDocDir (2) = arrDocDir (1)  &  "\" &  fnCat 			'(D:\Crime\YYYY\№СМЭ_YY_Общий)
+		MkDir arrDocDir (2)
+	If  fn <> "" Then
+	  	arrDocDir (3) = arrDocDir (2) &  " \Фото_" &  fn			'(D:\Crime\YYYY\№СМЭ_YY_Общий\Фото_№СМЭ_YY)
+		arrDocDir (4) = 	arrDocDir (2) & "\Упаковки_"  &  fn		'(D:\Crime\YYYY\№СМЭ_YY_Общий\Упаковки_№СМЭ_YY)
+		arrDocDir (5) = arrDocDir(2) & "\Сканы_"  &  fn			'(D:\Crime\YYYY\№СМЭ_YY_Общий\Сканы_№СМЭ_YY)
+		arrDocDir (6) = arrDocDir(2) & "\Сопровод_"  &  fn		'(D:\Crime\YYYY\№СМЭ_YY_Общий\Сопровод_№СМЭ_YY)
+	Else
+	End If	
+	MkDir arrDocDir (3)
+	MkDir arrDocDir (4)
+	MkDir arrDocDir (5)
+	MkDir arrDocDir (6)
+' Отладка:
+	Dim i As Integer
+	 For Each i  In arrDocDir()
+	  	Debug.Print "Значение массива " &  i  & " = " &   arrDocDir(i) & Chr(10)
+	Next i
+End Sub
+'+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+Public Static Function getMainRoot (Optional tmpRoot As String = "", _
+								Optional tmpnameFolder As String = "")
+'Создание и проверка валидности пути для нового каталога папок
+Set SvcService = CreateObject("Svcsvc.Service") 'объект библиотеки  svcsvc.dll
+Set fs = New FileSystemObject                   'экземпляр  FileSystemObject
+''1)проверка на наличие папки по указанному пути:
+	Dim newDir As String
+		If tmpRoot = "" Then
+       			tmpRoot = MAIN_ROOT
+'     			Проверка наличия директории MAIN_ROOT
+        		If Not fs.FolderExists(tmpRoot) Then  ' если такая папка не существует в этом месте
+	            		MsgBox MAIN_FOLDER_NOT_EXIST & "Укажите папку для сохранения новых документов!", vbCritical, 
+				newDir = SvcService.SelectFolder("Выбираем папку для сохранения документов", "", &H10 + &H4000, "")
+        		Else
+				newDir = tmpRoot
+	       		End If
+    		Else
+        		newDir = tmpRoot
+		End If
+		Err.Clear ' Очищаем поток от ошибки при отсутсвии элемента!
+'	2)создание  директории корневой папки:
+    	newDir = newDir & tmpnameFolder & "\"   'Пример: D:\Эксперт_НомерДокумента_Год\
+'3)Проверка наличия создаваемой директории
+	If Not fs.FolderExists(newDir) Then  ' если такая папка не существует в этом месте
+	        MkDir newDir
+    	End If
+	    getMainRoot = newDir
+Set SvcService = Nothing    'объект библиотеки  svcsvc.dll
+Set fs = Nothing            	'экземпляр  FileSystemObject
+Err.Clear ' Очищаем поток от ошибки при отсутствии элемента
+End Function
+
+Create_mainFolders
+

@@ -1,0 +1,25 @@
+Line 13: Class MSComctlLib.Toolbar of control tbToolBar was not a loaded control class.
+Line 121: Class MSComctlLib.StatusBar of control sbStatusBar was not a loaded control class.
+Line 151: Class MSComDlg.CommonDialog of control dlgCommonDialog was not a loaded control class.
+Line 158: Class MSComctlLib.ImageList of control imlToolbarIcons was not a loaded control class.
+Line 20: The property name _ExtentX in tbToolBar is invalid.
+Line 21: The property name _ExtentY in tbToolBar is invalid.
+Line 22: The property name ButtonWidth in tbToolBar is invalid.
+Line 23: The property name ButtonHeight in tbToolBar is invalid.
+Line 25: The property name ImageList in tbToolBar is invalid.
+Line 26: The property name _Version in tbToolBar is invalid.
+Line 119: The property name Buttons in tbToolBar is invalid.
+Line 128: The property name _ExtentX in sbStatusBar is invalid.
+Line 129: The property name _ExtentY in sbStatusBar is invalid.
+Line 130: The property name _Version in sbStatusBar is invalid.
+Line 149: The property name Panels in sbStatusBar is invalid.
+Line 154: The property name _ExtentX in dlgCommonDialog is invalid.
+Line 155: The property name _ExtentY in dlgCommonDialog is invalid.
+Line 156: The property name _Version in dlgCommonDialog is invalid.
+Line 161: The property name _ExtentX in imlToolbarIcons is invalid.
+Line 162: The property name _ExtentY in imlToolbarIcons is invalid.
+Line 164: The property name ImageWidth in imlToolbarIcons is invalid.
+Line 165: The property name ImageHeight in imlToolbarIcons is invalid.
+Line 166: The property name MaskColor in imlToolbarIcons is invalid.
+Line 167: The property name _Version in imlToolbarIcons is invalid.
+Line 226: The property name Images in imlToolbarIcons is invalid.
